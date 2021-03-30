@@ -90,7 +90,10 @@ class FirestoreCollectionService extends ICollectionService {
     var docRef = _getRef<T>(res) //
         .doc(id);
 
-    await docRef.set(firestireMap(values, false), SetOptions(merge: true));
+    var _map = firestireMap(values, false);
+    _map['updatedAt'] = FieldValue.serverTimestamp();
+
+    await docRef.set(_map, SetOptions(merge: true));
   }
 
   @override
@@ -98,11 +101,17 @@ class FirestoreCollectionService extends ICollectionService {
     var id = doc.getId() ?? '';
     DocumentReference docRef;
 
+    var _map = toFirestore(doc);
+    _map['updatedAt'] = FieldValue.serverTimestamp();
+
     if (id == '') {
-      docRef = await _getRef<T>(res).add(toFirestore(doc));
+      //+ Creation
+      _map['createdAt'] = FieldValue.serverTimestamp();
+      docRef = await _getRef<T>(res).add(_map);
     } else {
+      //+ Update
       docRef = _getRef<T>(res).doc(id);
-      await docRef.set(toFirestore(doc), SetOptions(merge: false));
+      await docRef.set(_map, SetOptions(merge: false));
     }
 
     return fromFirestore<T>(res, await docRef.snapshots().first);
