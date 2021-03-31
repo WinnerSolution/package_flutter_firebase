@@ -10,11 +10,14 @@ T fromFirestore<T extends IResourceData>(FirestoreResource<T> res, DocumentSnaps
   if (_map == null) return null;
 
   var _result = res.deserializer({
-    'id': docSnap.id,
-    'path': docSnap.reference.path,
+    // 'id': docSnap.id,
+    // 'path': docSnap.reference.path,
     ..._map,
   });
 
+  _result
+    ..setId(docSnap.id)
+    ..setPath(docSnap.reference.path);
   return _result;
 }
 
