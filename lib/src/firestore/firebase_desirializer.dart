@@ -18,6 +18,7 @@ T fromFirestore<T extends IResourceData>(FirestoreResource<T> res, DocumentSnaps
   _result
     ..setId(docSnap.id)
     ..setPath(docSnap.reference.path);
+
   return _result;
 }
 

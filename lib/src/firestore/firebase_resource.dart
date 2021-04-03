@@ -2,13 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:softi_common/resource.dart';
 
 class FirestoreResource<T> extends IResource<T> {
-  final String endpoint;
+  String _endpoint;
   final Deserializer<T> fromJson;
+
+  FirestoreResource<T> setEndpoint(String newEndPoint) {
+    _endpoint = newEndPoint;
+    return this;
+  }
 
   FirestoreResource({
     @required this.fromJson,
-    @required this.endpoint,
-  });
+    String endpoint,
+  }) : _endpoint = endpoint;
 
   @override
   String endpointResolver({
@@ -19,7 +24,7 @@ class FirestoreResource<T> extends IResource<T> {
     String dataPath,
     T dataObject,
   }) {
-    return endpoint;
+    return _endpoint;
   }
 
   @override
