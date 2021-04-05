@@ -20,15 +20,14 @@ dependencies:
   #     url: https://github.com/atoumbre/package_flutter_common.git
   #     ref: v0.3.1
   
-  google_sign_in:
-  sign_in_with_apple:
+  google_sign_in: ^5.0.1
+  sign_in_with_apple: ^3.0.0
 
-  firebase_core:
-  firebase_auth:
-  firebase_dynamic_links:
-  cloud_firestore:
-  firebase_storage:
-  # firebase_remote_config:
+  firebase_core: ^1.0.2
+  firebase_auth: ^1.0.1
+  firebase_dynamic_links: ^0.8.0
+  cloud_firestore: ^1.0.3
+  firebase_storage: ^8.0.1
 
   # flutter packages pub run build_runner watch --delete-conflicting-outputs
   # flutter packages pub run build_runner build --delete-conflicting-outputs
