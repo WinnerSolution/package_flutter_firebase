@@ -38,9 +38,12 @@ abstract class FirebaseAuthProvider {
   static AuthUser userFromFirebase(UserCredential userCredential) {
     var user = userCredential.user;
 
-    var authUser = authUserFromUser(user).copyWith(
-      isNew: userCredential.additionalUserInfo.isNewUser,
+    var authUser = authUserFromUser(user);
+
+    authUser?.setIsNew(
+      userCredential.additionalUserInfo.isNewUser,
     );
+
     return authUser;
   }
 
