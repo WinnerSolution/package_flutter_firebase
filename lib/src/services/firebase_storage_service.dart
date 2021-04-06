@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:softi_common/services.dart';
 
 var _eventTypeMap = {
@@ -16,8 +15,8 @@ var _eventTypeMap = {
 class FirebaseStorageService extends IRemoteStorageService {
   @override
   Future<UploadEvent> uploadMedia({
-    @required dynamic imageToUpload,
-    @required String title,
+    required dynamic imageToUpload,
+    required String title,
     bool addTimestamp = false,
   }) {
     print('Start up load');
@@ -44,7 +43,7 @@ class FirebaseStorageService extends IRemoteStorageService {
               ? null
               : NetworkMediaAsset(
                   url: await event.ref.getDownloadURL(),
-                  title: event.metadata.fullPath,
+                  title: event.metadata!.fullPath,
 
                   // url: (await event.snapshot.ref.getDownloadURL()).toString(),
                   // title: event.snapshot.storageMetadata.path,
@@ -68,8 +67,8 @@ class FirebaseStorageService extends IRemoteStorageService {
 
   @override
   Stream<UploadEvent> uploadMediaStream({
-    @required dynamic imageToUpload,
-    @required String title,
+    required dynamic imageToUpload,
+    required String title,
     bool addTimestamp = false,
   }) {
     print('Start up load');
@@ -96,7 +95,7 @@ class FirebaseStorageService extends IRemoteStorageService {
               ? null
               : NetworkMediaAsset(
                   url: await event.ref.getDownloadURL(),
-                  title: event.metadata.fullPath,
+                  title: event.metadata!.fullPath,
 
                   // url: (await event.snapshot.ref.getDownloadURL()).toString(),
                   // title: event.snapshot.storageMetadata.path,

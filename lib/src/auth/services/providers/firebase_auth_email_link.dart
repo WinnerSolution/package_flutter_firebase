@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:softi_common/auth.dart';
 import 'package:softi_firebase/src/auth/services/firebase_auth_provider.dart';
 
 class FirebaseAuthEmailLink extends FirebaseAuthProvider {
-  final ActionCodeSettings actionCodeSettings;
+  final ActionCodeSettings? actionCodeSettings;
 
   FirebaseAuthEmailLink(FirebaseAuth firebaseAuth, {this.actionCodeSettings}) : super(firebaseAuth);
 
@@ -12,7 +11,7 @@ class FirebaseAuthEmailLink extends FirebaseAuthProvider {
     return EmailAuthProvider.credentialWithLink(email: email, emailLink: link);
   }
 
-  Future<AuthUser> signInWithEmailAndLink({String email, String link}) async {
+  Future<AuthUser?> signInWithEmailAndLink({required String email, required String link}) async {
     return signInWithCredential(await _getCredentialForEmailAndLink(email, link));
   }
 
@@ -20,10 +19,10 @@ class FirebaseAuthEmailLink extends FirebaseAuthProvider {
     return Future.value(firebaseAuth.isSignInWithEmailLink(link));
   }
 
-  Future<void> sendSignInWithEmailLink({@required String email}) async {
+  Future<void> sendSignInWithEmailLink({required String email}) async {
     return await firebaseAuth.sendSignInLinkToEmail(
       email: email,
-      actionCodeSettings: actionCodeSettings,
+      actionCodeSettings: actionCodeSettings!,
     );
   }
 }

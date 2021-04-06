@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:softi_common/resource.dart';
 import 'package:softi_firebase/src/firestore/firebase_resource.dart';
 
-T fromFirestore<T extends IResourceData>(FirestoreResource<T> res, DocumentSnapshot docSnap) {
+T? fromFirestore<T extends IResourceData>(FirestoreResource<T> res, DocumentSnapshot docSnap) {
   var map = docSnap.data();
   if (map == null) return null;
 
   var _map = firestireMap(map, true);
-  if (_map == null) return null;
 
   var _result = res.deserializer({
     // 'id': docSnap.id,
@@ -24,10 +23,8 @@ T fromFirestore<T extends IResourceData>(FirestoreResource<T> res, DocumentSnaps
 
 Map<String, dynamic> toFirestore(IResourceData doc) {
   var map = doc.toJson();
-  if (map == null) return null;
 
   var _map = firestireMap(map, false);
-  if (_map == null) return null;
 
   return _map
     ..remove('id') //
@@ -41,7 +38,7 @@ Map<String, dynamic> firestireMap(Map<String, dynamic> input, bool fromFirestore
     if (skipNull && v == null) {
       return;
     } else if (v is Map) {
-      result[k] = firestireMap(v, fromFirestore);
+      result[k] = firestireMap(v as Map<String, dynamic>, fromFirestore);
     } else if (v is List) {
       result[k] = firestireList(v, fromFirestore);
     } else {
@@ -58,7 +55,7 @@ List firestireList(List input, bool fromFirestore, [bool skipNull = true]) {
     if (skipNull && v == null) {
       return;
     } else if (v is Map) {
-      result.add(firestireMap(v, fromFirestore));
+      result.add(firestireMap(v as Map<String, dynamic>, fromFirestore));
     } else if (v is List) {
       result.add(firestireList(v, fromFirestore));
     } else {

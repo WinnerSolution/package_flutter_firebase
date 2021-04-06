@@ -10,11 +10,11 @@ class FirebaseAuthEmalPassword extends FirebaseAuthProvider {
     return EmailAuthProvider.credential(email: email, password: password);
   }
 
-  Future<AuthUser> signInWithEmailAndPassword(String email, String password) async {
+  Future<AuthUser?> signInWithEmailAndPassword(String email, String password) async {
     return signInWithCredential(await getCredentialForEmailPassword(email, password));
   }
 
-  Future<AuthUser> createUserWithEmailAndPassword(String email, String password) async {
+  Future<AuthUser?> createUserWithEmailAndPassword(String email, String password) async {
     final authResult = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     return FirebaseAuthProvider.userFromFirebase(authResult);
   }

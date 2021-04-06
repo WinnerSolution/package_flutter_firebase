@@ -1,23 +1,23 @@
 class FirebaseSettings {
   // Common
   // final bool handleCodeInApp; // true;
-  final String url; // 'https://job-ci.firebaseapp.com/';
-  final String dynamicLinkPrefix; //'https://job-ci.page.link';
+  final String? url; // 'https://job-ci.firebaseapp.com/';
+  final String? dynamicLinkPrefix; //'https://job-ci.page.link';
 
   // IOS
-  final String iOSBundleID; // 'com.winsoluce.job.mobile';
-  final String iOSMinimumVersion; // '21';
-  final String appStoreId;
+  final String? iOSBundleID; // 'com.winsoluce.job.mobile';
+  final String? iOSMinimumVersion; // '21';
+  final String? appStoreId;
 
   // Android
-  final String androidPackageName; // 'com.winsoluce.job.mobile';
-  final String androidMinimumVersion; // '21';
-  final bool androidInstallIfNotAvailable; // true;
+  final String? androidPackageName; // 'com.winsoluce.job.mobile';
+  final String? androidMinimumVersion; // '21';
+  final bool? androidInstallIfNotAvailable; // true;
 
   // Social Login
-  final String facebookClientId; //"500775533853632";
-  final String appleSignInCallbackUrl; //"500775533853632";
-  final String appleSignInClientId; //"500775533853632";
+  final String? facebookClientId; //"500775533853632";
+  final String? appleSignInCallbackUrl; //"500775533853632";
+  final String? appleSignInClientId; //"500775533853632";
 
   const FirebaseSettings({
     this.url,

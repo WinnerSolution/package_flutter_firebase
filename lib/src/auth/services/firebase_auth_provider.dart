@@ -6,20 +6,20 @@ abstract class FirebaseAuthProvider {
 
   FirebaseAuthProvider(this.firebaseAuth);
 
-  Future<AuthUser> signInWithCredential(
+  Future<AuthUser?> signInWithCredential(
     AuthCredential credential, {
-    String displayName,
-    String photoURL,
+    String? displayName,
+    String? photoURL,
     linkToUser = false,
   }) async {
     final authResult = linkToUser
-        ? await firebaseAuth.currentUser.linkWithCredential(credential)
+        ? await firebaseAuth.currentUser!.linkWithCredential(credential)
         : await firebaseAuth.signInWithCredential(credential);
 
     // final firebaseUser = authResult.user;
 
-    if (displayName != null) await authResult.user.updateProfile(displayName: displayName);
-    if (photoURL != null) await authResult.user.updateProfile(photoURL: photoURL);
+    if (displayName != null) await authResult.user!.updateProfile(displayName: displayName);
+    if (photoURL != null) await authResult.user!.updateProfile(photoURL: photoURL);
 
     return userFromFirebase(authResult);
   }
@@ -35,19 +35,19 @@ abstract class FirebaseAuthProvider {
   //   return userFromFirebase(authResult);
   // }
 
-  static AuthUser userFromFirebase(UserCredential userCredential) {
+  static AuthUser? userFromFirebase(UserCredential userCredential) {
     var user = userCredential.user;
 
     var authUser = authUserFromUser(user);
 
     authUser?.setIsNew(
-      userCredential.additionalUserInfo.isNewUser,
+      userCredential.additionalUserInfo!.isNewUser,
     );
 
     return authUser;
   }
 
-  static AuthUser authUserFromUser(User user) {
+  static AuthUser? authUserFromUser(User? user) {
     if (user == null) {
       return null;
     }
@@ -63,8 +63,6 @@ abstract class FirebaseAuthProvider {
     user.photoURL;
     user.providerData;
     user.refreshToken;
-    // user.multiFactor;
-    // user.providerId;
 
     // user.
     return AuthUser(

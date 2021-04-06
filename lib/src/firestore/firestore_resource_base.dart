@@ -12,7 +12,7 @@ class FirestoreResourceBase extends IResourceBase {
 
   @override
   IResourceAdapter<T> adapter<T extends IResourceData>(IResource<IResourceData> res) {
-    return FirestoreResourceAdapter<T>(_firebaseFirestore)..setResource(res);
+    return FirestoreResourceAdapter<T>(_firebaseFirestore)..setResource(res as IResource<T>);
   }
 
   @override

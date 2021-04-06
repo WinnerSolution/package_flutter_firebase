@@ -4,8 +4,8 @@ import 'package:softi_common/auth.dart';
 import 'package:softi_firebase/src/auth/services/firebase_auth_provider.dart';
 
 class FirebaseAppleSignin extends FirebaseAuthProvider {
-  final String appleSignInCallbackUrl;
-  final String appleSignInClientId;
+  final String? appleSignInCallbackUrl;
+  final String? appleSignInClientId;
 
   FirebaseAppleSignin(
     FirebaseAuth firebaseAuth, {
@@ -20,10 +20,10 @@ class FirebaseAppleSignin extends FirebaseAuthProvider {
         AppleIDAuthorizationScopes.fullName,
       ],
       webAuthenticationOptions: WebAuthenticationOptions(
-        clientId: appleSignInClientId,
+        clientId: appleSignInClientId!,
         redirectUri: Uri.parse(
           //. 'https://us-central1-resto-ci.cloudfunctions.net/appleSignInCallback',
-          appleSignInCallbackUrl,
+          appleSignInCallbackUrl!,
         ),
       ),
     );
@@ -36,6 +36,6 @@ class FirebaseAppleSignin extends FirebaseAuthProvider {
     );
   }
 
-  Future<AuthUser> signInWithApple({linkToUser = false}) async =>
+  Future<AuthUser?> signInWithApple({linkToUser = false}) async =>
       signInWithCredential(await getCredentialForApple(), linkToUser: linkToUser);
 }

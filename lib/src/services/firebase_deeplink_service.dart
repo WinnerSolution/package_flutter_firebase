@@ -21,7 +21,7 @@ class FirebaseDeeplinkService extends IDynamicLinkService {
     // Register a link callback to fire if the app is opened up from the background
     // using a dynamic link.
     FirebaseDynamicLinks.instance.onLink(
-      onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      onSuccess: (PendingDynamicLinkData? dynamicLink) async {
         // handle link that has been retrieved
         _handleDeeplink(dynamicLink);
       },
@@ -32,14 +32,14 @@ class FirebaseDeeplinkService extends IDynamicLinkService {
   }
 
   // DeepLink handler helper
-  void _handleDeeplink(PendingDynamicLinkData data) async {
+  void _handleDeeplink(PendingDynamicLinkData? data) async {
     if (data == null) return;
 
     var _data = DynamicLinkData(
       link: data.link,
-      iosMinimumVersion: data.ios.minimumVersion,
-      androidMinimumVersion: data?.android?.minimumVersion,
-      androidClickTimestamp: data?.android?.clickTimestamp,
+      iosMinimumVersion: data.ios!.minimumVersion,
+      androidMinimumVersion: data.android?.minimumVersion,
+      androidClickTimestamp: data.android?.clickTimestamp,
     );
 
     // bool _stop = false;
@@ -58,7 +58,7 @@ class FirebaseDeeplinkService extends IDynamicLinkService {
   @override
   Future<String> createDeepLink(String queryString) async {
     final parameters = DynamicLinkParameters(
-      uriPrefix: settings.dynamicLinkPrefix,
+      uriPrefix: settings.dynamicLinkPrefix!,
       link: Uri.parse('${settings.url}/?$queryString'),
 
       dynamicLinkParametersOptions: DynamicLinkParametersOptions(
@@ -67,13 +67,13 @@ class FirebaseDeeplinkService extends IDynamicLinkService {
 
       // ANDROID
       androidParameters: AndroidParameters(
-        packageName: settings.androidPackageName,
-        minimumVersion: int.parse(settings.androidMinimumVersion),
+        packageName: settings.androidPackageName!,
+        minimumVersion: int.parse(settings.androidMinimumVersion!),
       ),
 
       // IOS
       iosParameters: IosParameters(
-        bundleId: settings.iOSBundleID,
+        bundleId: settings.iOSBundleID!,
         appStoreId: settings.appStoreId,
         minimumVersion: settings.iOSMinimumVersion,
       ),

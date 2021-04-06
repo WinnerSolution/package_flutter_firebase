@@ -9,18 +9,18 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
   final FirebaseFirestore _firestoreInstance;
   FirestoreResourceAdapter(this._firestoreInstance);
 
-  CollectionReference _getRef(FirestoreResource<T> res) {
+  CollectionReference _getRef(FirestoreResource<T?> res) {
     return _firestoreInstance.collection(res.endpoint);
   }
 
   @override
   Stream<QueryResult<T>> find(
-    QueryParameters queryParams, {
-    QueryPagination pagination,
+    QueryParameters? queryParams, {
+    QueryPagination? pagination,
     bool reactive = true,
   }) {
     var _query = _firestoreQueryBuilder(
-      _getRef(resource),
+      _getRef(resource as FirestoreResource<T?>),
       params: queryParams,
       pagination: pagination,
     );
@@ -31,13 +31,13 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
       (snapshot) {
         var data = snapshot.docs
             //! Filter possible here
-            .map<T>((doc) => fromFirestore<T>(resource, doc))
+            .map<T?>((doc) => fromFirestore<T>(resource as FirestoreResource<T>, doc))
             .toList();
 
         var changes = snapshot.docChanges
             //! Filter possible here
             .map((DocumentChange docChange) => DataChange<T>(
-                  data: fromFirestore<T>(resource, docChange.doc),
+                  data: fromFirestore<T>(resource as FirestoreResource<T>, docChange.doc),
                   oldIndex: docChange.oldIndex,
                   newIndex: docChange.newIndex,
                   type: {
@@ -62,7 +62,7 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
   // Check if record exsits
   @override
   Future<bool> exists(String recordId) async {
-    var _result = await _getRef(resource) //
+    var _result = await _getRef(resource as FirestoreResource<T?>) //
         .doc(recordId)
         .snapshots()
         .first;
@@ -72,18 +72,18 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
 
   // Stream documenent from db
   @override
-  Stream<T> get(String recordId, {bool reactive = true}) {
-    var _result = _getRef(resource) //
+  Stream<T?> get(String recordId, {bool reactive = true}) {
+    var _result = _getRef(resource as FirestoreResource<T?>) //
         .doc(recordId)
         .snapshots()
-        .map<T>((snapshot) => fromFirestore<T>(resource, snapshot));
+        .map<T?>((snapshot) => fromFirestore<T>(resource as FirestoreResource<T>, snapshot));
 
-    return (reactive ?? false) ? _result : Stream.fromFuture(_result.first);
+    return (reactive) ? _result : Stream.fromFuture(_result.first);
   }
 
   @override
   Future<void> update(String id, Map<String, dynamic> values) async {
-    var docRef = _getRef(resource) //
+    var docRef = _getRef(resource as FirestoreResource<T?>) //
         .doc(id);
 
     var _map = firestireMap(values, false);
@@ -93,8 +93,8 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
   }
 
   @override
-  Future<T> save(T doc) async {
-    var id = doc.getId() ?? '';
+  Future<T?> save(T doc) async {
+    var id = doc.getId();
     DocumentReference docRef;
 
     var _map = toFirestore(doc);
@@ -103,31 +103,31 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
     if (id == '') {
       //+ Creation
       _map['createdAt'] = FieldValue.serverTimestamp();
-      docRef = await _getRef(resource).add(_map);
+      docRef = await _getRef(resource as FirestoreResource<T?>).add(_map);
     } else {
       //+ Update
-      docRef = _getRef(resource).doc(id);
+      docRef = _getRef(resource as FirestoreResource<T?>).doc(id);
       await docRef.set(_map, SetOptions(merge: false));
     }
 
-    return fromFirestore<T>(resource, await docRef.snapshots().first);
+    return fromFirestore<T>(resource as FirestoreResource<T>, await docRef.snapshots().first);
   }
 
   @override
   Future<void> delete(String documentId) async {
-    await _getRef(resource).doc(documentId).delete();
+    await _getRef(resource as FirestoreResource<T?>).doc(documentId).delete();
   }
 
   /// Internala fmethodes
   Query _firestoreQueryBuilder(
     CollectionReference ref, {
-    QueryParameters params,
-    QueryPagination pagination,
+    QueryParameters? params,
+    QueryPagination? pagination,
   }) {
     Query _query = ref;
 
     if (params?.filterList != null) {
-      params.filterList.forEach((where) {
+      params!.filterList!.forEach((where) {
         switch (where.condition) {
           case QueryOperator.equal:
             _query = _query.where(where.field, isEqualTo: where.value);
@@ -160,7 +160,7 @@ class FirestoreResourceAdapter<T extends IResourceData> extends IResourceAdapter
 
     // Set orderBy
     if (params?.sortList != null) {
-      params.sortList.forEach((orderBy) {
+      params!.sortList.forEach((orderBy) {
         _query = _query.orderBy(orderBy.field, descending: orderBy.desc);
       });
     }

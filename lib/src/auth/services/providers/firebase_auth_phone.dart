@@ -12,7 +12,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
     return PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
   }
 
-  Future<AuthUser> signInWithPhone(verificationId, smsOTP) async {
+  Future<AuthUser?> signInWithPhone(verificationId, smsOTP) async {
     return signInWithCredential(await getCredentialForPhone(verificationId, smsOTP));
   }
 
@@ -21,16 +21,16 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
 
     return SendCodeResult(
       phoneNumber: phoneNumber,
-      codeVerification: (code) async => FirebaseAuthProvider.userFromFirebase((await confirmation.confirm(code))),
+      codeVerification: ((code) async => FirebaseAuthProvider.userFromFirebase((await confirmation.confirm(code)))!),
       resendCode: () => _sendSignInWithPhoneCodeWeb(phoneNumber),
     );
   }
 
   Future<SendCodeResult> _sendSignInWithPhoneCodeNative({
-    String phoneNumber,
+    required String phoneNumber,
     dynamic resendingId,
     bool autoRetrive = true,
-    int autoRetrievalTimeoutSeconds = 30,
+    int? autoRetrievalTimeoutSeconds = 30,
   }) async {
     var _sendCodeCompleter = Completer<SendCodeResult>();
 
@@ -48,7 +48,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
           codeVerification: (code) async {
             var _result = await signInWithPhone(verificationId, code);
             autoRetriveCompleter.complete(_result);
-            return _result;
+            return _result!;
           },
 
           ///
@@ -73,7 +73,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
 
       //? Auto retrieving flow
 
-      timeout: Duration(seconds: autoRetrive ? autoRetrievalTimeoutSeconds : 0),
+      timeout: Duration(seconds: autoRetrive ? autoRetrievalTimeoutSeconds! : 0),
 
       verificationCompleted: (AuthCredential authCredential) async {
         var _user = await signInWithCredential(authCredential);
@@ -90,16 +90,16 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
   }
 
   Future<SendCodeResult> sendSignInWithPhoneCode({
-    String phoneNumber,
+    String? phoneNumber,
     dynamic resendingId,
     bool autoRetrive = true,
-    int autoRetrievalTimeoutSeconds = 30,
+    int? autoRetrievalTimeoutSeconds = 30,
   }) {
     if (kIsWeb) {
-      return _sendSignInWithPhoneCodeWeb(phoneNumber);
+      return _sendSignInWithPhoneCodeWeb(phoneNumber!);
     } else {
       var test = _sendSignInWithPhoneCodeNative(
-        phoneNumber: phoneNumber,
+        phoneNumber: phoneNumber!,
         resendingId: resendingId,
         autoRetrive: autoRetrive,
         autoRetrievalTimeoutSeconds: autoRetrievalTimeoutSeconds,
