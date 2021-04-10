@@ -29,6 +29,7 @@ Future<void> firebaseServicesInit(ILocalStore store, FirebaseAuthService auth) a
     var _authLink = deepLink.link.toString();
     if (await auth.isSignInWithEmailLink(link: _authLink)) {
       var email = await store.getSecuredKey('UserEmail');
+      if (email == null) return;
       await auth.signInWithEmailAndLink(email: email, link: deepLink.link.toString());
     }
   }));

@@ -73,17 +73,17 @@ class FirebaseAuthService extends IAuthService {
 
   @override
   Future<AuthUser?> createUserWithEmailAndPassword(String email, String password) {
-    return catchError<AuthUser?>(() => emailSignin.createUserWithEmailAndPassword(email, password))!;
+    return serviceTaskHandler<AuthUser?>(() => emailSignin.createUserWithEmailAndPassword(email, password));
   }
 
   @override
   Future<void> sendPasswordResetEmail(String email) {
-    return catchError<void>(() => emailSignin.sendPasswordResetEmail(email))!;
+    return serviceTaskHandler<void>(() => emailSignin.sendPasswordResetEmail(email));
   }
 
   @override
-  Future<void> sendSignInWithEmailLink({String? email}) {
-    return catchError<void>(() => emailLinkSignin.sendSignInWithEmailLink(email: email!))!;
+  Future<void> sendSignInWithEmailLink({required String email}) {
+    return serviceTaskHandler<void>(() => emailLinkSignin.sendSignInWithEmailLink(email: email));
   }
 
   @override
@@ -93,61 +93,61 @@ class FirebaseAuthService extends IAuthService {
     bool? autoRetrive,
     int? autoRetrievalTimeoutSeconds = 30,
   }) {
-    return catchError<SendCodeResult>(
+    return serviceTaskHandler<SendCodeResult>(
       () => phoneSignin.sendSignInWithPhoneCode(
         phoneNumber: phoneNumber,
         resendingId: resendingId,
         autoRetrive: true,
         autoRetrievalTimeoutSeconds: autoRetrievalTimeoutSeconds,
       ),
-    )!;
+    );
   }
 
   @override
   Future<AuthUser?> signInAnonymously() {
-    return catchError<AuthUser?>(() async {
+    return serviceTaskHandler<AuthUser?>(() async {
       final authResult = await firebaseAuth.signInAnonymously();
       return FirebaseAuthProvider.userFromFirebase(authResult);
-    })!;
+    });
   }
 
   @override
   Future<AuthUser?> signInWithApple({linkToUser = false}) {
-    return catchError<AuthUser?>(() => appleSignin.signInWithApple(linkToUser: linkToUser))!;
+    return serviceTaskHandler<AuthUser?>(() => appleSignin.signInWithApple(linkToUser: linkToUser));
   }
 
   @override
-  Future<AuthUser?> signInWithEmailAndLink({String? email, String? link}) {
-    return catchError<AuthUser?>(() => emailLinkSignin.signInWithEmailAndLink(email: email!, link: link!))!;
+  Future<AuthUser?> signInWithEmailAndLink({required String email, required String link}) {
+    return serviceTaskHandler<AuthUser?>(() => emailLinkSignin.signInWithEmailAndLink(email: email, link: link));
   }
 
   @override
   Future<AuthUser?> signInWithEmailAndPassword(String email, String password) {
-    return catchError<AuthUser?>(() => emailSignin.signInWithEmailAndPassword(email, password))!;
+    return serviceTaskHandler<AuthUser?>(() => emailSignin.signInWithEmailAndPassword(email, password));
   }
 
   @override
   Future<AuthUser?> signInWithFacebook(param, {linkToUser = false}) {
-    return catchError<AuthUser?>(() => facebookSignin.signInWithFacebook(param, linkToUser: linkToUser))!;
+    return serviceTaskHandler<AuthUser?>(() => facebookSignin.signInWithFacebook(param, linkToUser: linkToUser));
   }
 
   @override
   Future<AuthUser?> signInWithGoogle({linkToUser = false}) {
-    return catchError<AuthUser?>(() => googleSignin.signInWithGoogle(linkToUser: linkToUser))!;
+    return serviceTaskHandler<AuthUser?>(() => googleSignin.signInWithGoogle(linkToUser: linkToUser));
   }
 
   @override
   Future<AuthUser?> signInWithPhone(verificationId, smsOTP) {
-    return catchError<AuthUser?>(() => phoneSignin.signInWithPhone(verificationId, smsOTP))!;
+    return serviceTaskHandler<AuthUser?>(() => phoneSignin.signInWithPhone(verificationId, smsOTP));
   }
 
   @override
   Future<bool> isSignInWithEmailLink({String? link}) {
-    return catchError<bool>(() => emailLinkSignin.isSignInWithEmailLink(link!))!;
+    return serviceTaskHandler<bool>(() => emailLinkSignin.isSignInWithEmailLink(link!));
   }
 
   @override
   Future<void> signOut() {
-    return catchError<void>(() => firebaseAuth.signOut())!;
+    return serviceTaskHandler<void>(() => firebaseAuth.signOut());
   }
 }
