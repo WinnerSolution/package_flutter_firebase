@@ -28,6 +28,7 @@ dependencies:
   firebase_dynamic_links: 2.0.0-dev.0
   cloud_firestore: ^1.0.3
   firebase_storage: ^8.0.1
+  firebase_database: ^7.0.0-dev.0
 
   # flutter packages pub run build_runner watch --delete-conflicting-outputs
   # flutter packages pub run build_runner build --delete-conflicting-outputs
