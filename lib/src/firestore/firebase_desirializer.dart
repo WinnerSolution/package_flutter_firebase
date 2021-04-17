@@ -71,7 +71,7 @@ dynamic firestoreTransform(dynamic v, bool fromFirestore) {
     //FROM FIRESTORE
 
     if (v is Timestamp) {
-      return v.toDate();
+      return v.toDate().toIso8601String();
     } else if (v is DocumentReference) {
       return v.id;
     } else {
@@ -79,6 +79,8 @@ dynamic firestoreTransform(dynamic v, bool fromFirestore) {
     }
   } else {
     // TO FIRESTORE
+
+    DateTime.tryParse(v);
 
     if (v is DateTime) {
       return Timestamp.fromDate(v);

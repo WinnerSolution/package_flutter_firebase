@@ -134,6 +134,7 @@ class FirebaseAuthService extends IAuthService {
   @override
   Future<AuthUser?> signInWithGoogle({linkToUser = false}) {
     return failureCatcher<AuthUser?>(() => googleSignin.signInWithGoogle(linkToUser: linkToUser));
+    // return googleSignin.signInWithGoogle(linkToUser: linkToUser);
   }
 
   @override
