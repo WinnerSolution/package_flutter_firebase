@@ -62,7 +62,7 @@ class FirebasePresenceService extends IPresenceService {
 
       _userStatusDatabaseRef = FirebaseDatabase.instance
           .reference() //
-          .child('status/' + authUser!.uid!);
+          .child('status/' + authUser!.uid);
 
       _sub = FirebaseDatabase.instance.reference().child('.info/connected').onValue.listen((Event event) async {
         if (event.snapshot.value == false) {

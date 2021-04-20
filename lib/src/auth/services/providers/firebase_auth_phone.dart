@@ -30,7 +30,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
     required String phoneNumber,
     dynamic resendingId,
     bool autoRetrive = true,
-    int? autoRetrievalTimeoutSeconds = 30,
+    int autoRetrievalTimeoutSeconds = 30,
   }) async {
     var _sendCodeCompleter = Completer<SendCodeResult>();
 
@@ -73,7 +73,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
 
       //? Auto retrieving flow
 
-      timeout: Duration(seconds: autoRetrive ? autoRetrievalTimeoutSeconds! : 0),
+      timeout: Duration(seconds: autoRetrive ? autoRetrievalTimeoutSeconds : 0),
 
       verificationCompleted: (AuthCredential authCredential) async {
         var _user = await signInWithCredential(authCredential);
@@ -93,7 +93,7 @@ class FirebaseAuthPhone extends FirebaseAuthProvider {
     String? phoneNumber,
     dynamic resendingId,
     bool autoRetrive = true,
-    int? autoRetrievalTimeoutSeconds = 30,
+    int autoRetrievalTimeoutSeconds = 30,
   }) {
     if (kIsWeb) {
       return _sendSignInWithPhoneCodeWeb(phoneNumber!);

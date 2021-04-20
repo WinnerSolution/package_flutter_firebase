@@ -91,7 +91,7 @@ class FirebaseAuthService extends IAuthService {
     String? phoneNumber,
     resendingId,
     bool? autoRetrive,
-    int? autoRetrievalTimeoutSeconds = 30,
+    int autoRetrievalTimeoutSeconds = 30,
   }) {
     return failureCatcher<SendCodeResult>(
       () => phoneSignin.sendSignInWithPhoneCode(
